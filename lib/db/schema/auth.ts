@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const user = sqliteTable("user", {
-  id: text("id").primaryKey(),
+  id: integer("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "boolean" })
@@ -21,7 +21,7 @@ export const user = sqliteTable("user", {
 export const session = sqliteTable(
   "session",
   {
-    id: text("id").primaryKey(),
+    id: integer("id").primaryKey(),
     expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
     token: text("token").notNull().unique(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
@@ -42,7 +42,7 @@ export const session = sqliteTable(
 export const account = sqliteTable(
   "account",
   {
-    id: text("id").primaryKey(),
+    id: integer("id").primaryKey(),
     accountId: text("account_id").notNull(),
     providerId: text("provider_id").notNull(),
     userId: text("user_id")
@@ -72,7 +72,7 @@ export const account = sqliteTable(
 export const verification = sqliteTable(
   "verification",
   {
-    id: text("id").primaryKey(),
+    id: integer("id").primaryKey(),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
     expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
