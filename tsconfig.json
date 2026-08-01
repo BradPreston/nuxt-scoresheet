@@ -14,5 +14,6 @@
     }
   ],
   // https://nuxt.com/docs/guide/concepts/typescript
-  "files": []
+  "files": [],
+  "include": ["../lib/**/*"]
 }

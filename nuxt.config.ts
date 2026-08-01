@@ -10,4 +10,12 @@ export default defineNuxtConfig({
       standalone: false,
     },
   },
+
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        types: ["node"],
+      },
+    },
+  },
 });

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "concurrently \"pnpm run dev:db\" \"nuxt dev\"",
+    "dev:db": "turso dev --db-file local.db",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -13,17 +14,25 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.4",
     "@nuxt/eslint": "1.16.0",
+    "concurrently": "^10.0.4",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "1.0.0-rc.4",
     "eslint": "^10.8.0",
     "nuxt": "^4.5.1",
     "vue": "^3.5.40",
-    "vue-router": "^5.2.0"
+    "vue-router": "^5.2.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.2.0",
+    "@types/node": "^26.1.2",
+    "drizzle-kit": "1.0.0-rc.4",
     "eslint-plugin-format": "^2.0.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.3.0"
+    "lint-staged": "^17.3.0",
+    "tsx": "^4.23.1"
   },
   "lint-staged": {
     "*": "pnpm lint"
