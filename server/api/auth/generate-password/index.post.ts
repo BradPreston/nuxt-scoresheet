@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   if (!body.success) {
     throw createError({
       status: 400,
-      statusMessage: "Password error",
+      statusMessage: "Bad request",
       message: z.prettifyError(body.error),
     });
   }
