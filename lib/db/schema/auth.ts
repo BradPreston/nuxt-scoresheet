@@ -86,3 +86,5 @@ export const verification = sqliteTable(
   },
   table => [index("verification_identifier_idx").on(table.identifier)],
 );
+
+export type SelectUser = typeof user.$inferSelect;
