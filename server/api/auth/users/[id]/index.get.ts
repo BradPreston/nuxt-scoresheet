@@ -1,34 +1,23 @@
-import { getUserById } from "~~/server/repository/auth.repository";
-import { z } from "zod";
-
-const schema = z.object({
-  id: z.string(),
-});
+import { BadRequestError, NotFoundError } from "~~/lib/errors";
+import { getUserById } from "~~/server/services/user.service";
 
 export default defineEventHandler(async (event) => {
-  const params = await getValidatedRouterParams(event, params => schema.safeParse(params));
+  try {
+    const user = await getUserById(event);
+    return user;
+  }
+  catch (error) {
+    if (error instanceof NotFoundError || error instanceof BadRequestError) {
+      throw createError({
+        status: error.status,
+        statusMessage: error.statusMessage,
+        message: error.message,
+      });
+    }
 
-  if (!params.success) {
     throw createError({
       status: 400,
-      statusMessage: "Bad Request",
-      message: z.prettifyError(params.error),
+      message: "Something went wrong",
     });
   }
-
-  const id = parseInt(params.data.id);
-
-  const user = await getUserById(id);
-
-  if (!user) {
-    throw createError({
-      status: 404,
-      statusMessage: "Not found",
-      message: `No user was found with the id "${id}"`,
-    });
-  }
-
-  return {
-    user,
-  };
 });

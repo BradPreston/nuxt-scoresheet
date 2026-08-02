@@ -8,3 +8,7 @@ export async function getUserById(id: number): Promise<SelectUser | undefined> {
   const [foundUser] = await db.select().from(user).where(eq(user.id, id));
   return foundUser;
 }
+
+export default {
+  getUserById,
+};
