@@ -8,6 +8,9 @@ export const game = sqliteTable("game", {
   gameTypeId: integer("game_type_id")
     .notNull()
     .references(() => gameType.id, { onDelete: "cascade" }),
+  completed: integer("completed", { mode: "boolean" })
+    .$default(() => false)
+    .notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),

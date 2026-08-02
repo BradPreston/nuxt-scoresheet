@@ -1,0 +1,1 @@
+ALTER TABLE `game` ADD `completed` integer NOT NULL;
