@@ -1,8 +1,10 @@
 import { sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
 
 export const user = sqliteTable("user", {
-  id: integer("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "boolean" })
@@ -21,7 +23,7 @@ export const user = sqliteTable("user", {
 export const session = sqliteTable(
   "session",
   {
-    id: integer("id").primaryKey(),
+    id: integer("id").primaryKey({ autoIncrement: true }),
     expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
     token: text("token").notNull().unique(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
@@ -42,7 +44,7 @@ export const session = sqliteTable(
 export const account = sqliteTable(
   "account",
   {
-    id: integer("id").primaryKey(),
+    id: integer("id").primaryKey({ autoIncrement: true }),
     accountId: text("account_id").notNull(),
     providerId: text("provider_id").notNull(),
     userId: text("user_id")
@@ -72,7 +74,7 @@ export const account = sqliteTable(
 export const verification = sqliteTable(
   "verification",
   {
-    id: integer("id").primaryKey(),
+    id: integer("id").primaryKey({ autoIncrement: true }),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
     expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
@@ -88,3 +90,16 @@ export const verification = sqliteTable(
 );
 
 export type SelectUser = typeof user.$inferSelect;
+export const InsertUser = createInsertSchema(user, {
+  name: z.string("Name is required"),
+  email: z.email("Email is required"),
+}).omit({
+  id: true,
+  emailVerified: true,
+  image: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  password: z.string("Password is required").min(8),
+});
+export type InsertUserType = z.infer<typeof InsertUser>;

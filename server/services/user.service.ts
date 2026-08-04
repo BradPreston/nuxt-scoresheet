@@ -1,3 +1,4 @@
+import { InsertUser } from "~~/lib/db/schema/auth";
 import { BadRequestError, NotFoundError } from "~~/lib/errors";
 import { z } from "zod";
 
@@ -27,4 +28,16 @@ export async function getUserById(event: H3Event<globalThis.EventHandlerRequest>
   return {
     user,
   };
+}
+
+export async function insertUser(event: H3Event<globalThis.EventHandlerRequest>) {
+  const userData = await readValidatedBody(event, InsertUser.safeParse);
+
+  if (!userData.success) {
+    throw new BadRequestError(z.prettifyError(userData.error));
+  }
+
+  const { user } = await userRepository.insertUser(userData.data, event);
+
+  return user;
 }

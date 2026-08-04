@@ -29,6 +29,9 @@ importers:
       drizzle-orm:
         specifier: 1.0.0-rc.4
         version: 1.0.0-rc.4(@libsql/client@0.17.4)(valibot@1.4.2(typescript@6.0.3))(zod@4.4.3)
+      drizzle-zod:
+        specifier: ^0.8.3
+        version: 0.8.3(drizzle-orm@1.0.0-rc.4(@libsql/client@0.17.4)(valibot@1.4.2(typescript@6.0.3))(zod@4.4.3))(zod@4.4.3)
       eslint:
         specifier: ^10.8.0
         version: 10.8.0(jiti@2.7.0)
@@ -2867,6 +2870,12 @@ packages:
         optional: true
       zod:
         optional: true
+
+  drizzle-zod@0.8.3:
+    resolution: {integrity: sha512-66yVOuvGhKJnTdiqj1/Xaaz9/qzOdRJADpDa68enqS6g3t0kpNkwNYjUuaeXgZfO/UWuIM9HIhSlJ6C5ZraMww==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      zod: ^3.25.0 || ^4.0.0
 
   duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
@@ -8067,6 +8076,11 @@ snapshots:
     optionalDependencies:
       '@libsql/client': 0.17.4
       valibot: 1.4.2(typescript@6.0.3)
+      zod: 4.4.3
+
+  drizzle-zod@0.8.3(drizzle-orm@1.0.0-rc.4(@libsql/client@0.17.4)(valibot@1.4.2(typescript@6.0.3))(zod@4.4.3))(zod@4.4.3):
+    dependencies:
+      drizzle-orm: 1.0.0-rc.4(@libsql/client@0.17.4)(valibot@1.4.2(typescript@6.0.3))(zod@4.4.3)
       zod: 4.4.3
 
   duplexer@0.1.2: {}
