@@ -4,7 +4,7 @@ import { integer, sqliteTable } from "drizzle-orm/sqlite-core";
 import { gameType } from "./game-type";
 
 export const game = sqliteTable("game", {
-  id: integer("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   gameTypeId: integer("game_type_id")
     .notNull()
     .references(() => gameType.id, { onDelete: "cascade" }),
