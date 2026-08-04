@@ -19,3 +19,14 @@ export class BadRequestError extends Error {
     this.statusMessage = "Bad request";
   }
 }
+
+export class NotAllowedError extends Error {
+  status: number;
+  statusMessage: string;
+  constructor(message: string) {
+    super(message);
+    this.name = "NotAllowedError";
+    this.status = 401;
+    this.statusMessage = "Not allowed";
+  }
+}

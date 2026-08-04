@@ -101,5 +101,6 @@ export const InsertUser = createInsertSchema(user, {
   updatedAt: true,
 }).extend({
   password: z.string("Password is required").min(8),
+  apiKey: z.string("API key is required").min(44, "Invalid API key"),
 });
 export type InsertUserType = z.infer<typeof InsertUser>;

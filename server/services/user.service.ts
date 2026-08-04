@@ -1,5 +1,6 @@
 import { InsertUser } from "~~/lib/db/schema/auth";
-import { BadRequestError, NotFoundError } from "~~/lib/errors";
+import env from "~~/lib/env";
+import { BadRequestError, NotAllowedError, NotFoundError } from "~~/lib/errors";
 import { z } from "zod";
 
 import type { H3Event } from "#imports";
@@ -35,6 +36,10 @@ export async function insertUser(event: H3Event<globalThis.EventHandlerRequest>)
 
   if (!userData.success) {
     throw new BadRequestError(z.prettifyError(userData.error));
+  }
+
+  if (userData.data.apiKey !== env.X_API_KEY) {
+    throw new NotAllowedError("You do not have access to this endpoint");
   }
 
   const { user } = await userRepository.insertUser(userData.data, event);
