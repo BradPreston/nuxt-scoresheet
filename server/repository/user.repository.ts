@@ -25,7 +25,56 @@ export async function insertUser(userData: InsertUserType, event: H3Event<global
   };
 }
 
+export async function updateUserEmail(newEmail: string, event: H3Event<globalThis.EventHandlerRequest>) {
+  const { headers, response } = await auth.api.changeEmail({
+    returnHeaders: true,
+    body: {
+      newEmail,
+    },
+    headers: event.headers,
+  });
+
+  return {
+    headers,
+    status: response.status,
+  };
+}
+
+export async function updateUserName(name: string, event: H3Event<globalThis.EventHandlerRequest>) {
+  const { headers, response } = await auth.api.updateUser({
+    returnHeaders: true,
+    body: {
+      name,
+    },
+    headers: event.headers,
+  });
+
+  return {
+    headers,
+    status: response.status,
+  };
+}
+
+export async function updateUserPassword(newPassword: string, currentPassword: string, event: H3Event<globalThis.EventHandlerRequest>) {
+  const { headers, response } = await auth.api.changePassword({
+    returnHeaders: true,
+    body: {
+      newPassword,
+      currentPassword,
+    },
+    headers: event.headers,
+  });
+
+  return {
+    headers,
+    user: response.user,
+  };
+}
+
 export default {
   getUserById,
   insertUser,
+  updateUserEmail,
+  updateUserName,
+  updateUserPassword,
 };

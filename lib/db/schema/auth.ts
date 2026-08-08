@@ -104,3 +104,15 @@ export const InsertUser = createInsertSchema(user, {
   apiKey: z.string("API key is required").min(44, "Invalid API key"),
 });
 export type InsertUserType = z.infer<typeof InsertUser>;
+export const UpdateUser = z.object({
+  name: z.string().min(1, "Name cannot be empty").optional(),
+  email: z.email("Invalid email").optional(),
+  password: z.string("Password must be at least 8 characters").min(8).optional(),
+  currentPassword: z.string().optional(),
+}).refine(data => data.name !== undefined || data.email !== undefined || data.password !== undefined, {
+  message: "At least one of name, email, or password must be provided",
+}).refine(data => data.password === undefined || data.currentPassword !== undefined, {
+  message: "currentPassword is required to change the password",
+  path: ["currentPassword"],
+});
+export type UpdateUserType = z.infer<typeof UpdateUser>;

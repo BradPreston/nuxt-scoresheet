@@ -9,10 +9,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-
   advanced: {
     database: {
       generateId: false,
+    },
+  },
+  user: {
+    changeEmail: {
+      enabled: true,
+      updateEmailWithoutVerification: true,
     },
   },
   database: drizzleAdapter(db, {

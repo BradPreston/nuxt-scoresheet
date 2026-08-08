@@ -1,4 +1,5 @@
-import { InsertUser } from "~~/lib/db/schema/auth";
+import { auth } from "~~/lib/auth";
+import { InsertUser, UpdateUser } from "~~/lib/db/schema/auth";
 import env from "~~/lib/env";
 import { BadRequestError, NotAllowedError, NotFoundError } from "~~/lib/errors";
 import { z } from "zod";
@@ -45,4 +46,53 @@ export async function insertUser(event: H3Event<globalThis.EventHandlerRequest>)
   const { user } = await userRepository.insertUser(userData.data, event);
 
   return user;
+}
+
+export async function updateUser(event: H3Event<globalThis.EventHandlerRequest>) {
+  const params = await getValidatedRouterParams(event, params => schema.safeParse(params));
+
+  if (!params.success) {
+    throw new BadRequestError(z.prettifyError(params.error));
+  }
+
+  const id = parseInt(params.data.id);
+
+  const session = await auth.api.getSession({ headers: event.headers });
+
+  if (!session) {
+    throw new NotAllowedError("You must be signed in to update this profile");
+  }
+
+  // this endpoint is self-service only: the route id must match the signed-in user
+  if (Number(session.user.id) !== id) {
+    throw new NotAllowedError("You are not allowed to update this user");
+  }
+
+  const updatedUserData = await readValidatedBody(event, UpdateUser.safeParse);
+
+  if (!updatedUserData.success) {
+    throw new BadRequestError(z.prettifyError(updatedUserData.error));
+  }
+
+  const { email, password, currentPassword, name } = updatedUserData.data;
+
+  const updates: Record<string, boolean> = {};
+
+  if (name !== undefined && name !== session.user.name) {
+    const { status } = await userRepository.updateUserName(name, event);
+    updates.name = status;
+  }
+
+  if (email !== undefined && email !== session.user.email) {
+    const { status } = await userRepository.updateUserEmail(email, event);
+    updates.email = status;
+  }
+
+  if (password !== undefined) {
+    // currentPassword's presence is already enforced by the UpdateUser schema
+    await userRepository.updateUserPassword(password, currentPassword!, event);
+    updates.password = true;
+  }
+
+  return updates;
 }
