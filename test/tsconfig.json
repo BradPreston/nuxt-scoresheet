@@ -1,0 +1,11 @@
+{
+  // Nuxt's generated project tsconfigs (.nuxt/tsconfig.*.json) never include
+  // test/**, so without this file the editor's TS server has no project for
+  // files under test/ and can't resolve the ~~/#imports aliases they use.
+  // Extend the server config since it already defines those aliases.
+  "extends": "../.nuxt/tsconfig.server.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["./**/*", "../server/**/*"]
+}
