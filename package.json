@@ -14,7 +14,9 @@
     "lint:fix": "eslint . --fix",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "drizzle-kit migrate",
-    "test": "vitest"
+    "test": "vitest",
+    "test:unit": "vitest run --project unit",
+    "test:e2e": "vitest run --project e2e"
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",
